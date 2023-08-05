@@ -1,0 +1,47 @@
+# Load packages
+
+library(shiny)
+library(tidyverse)
+library(lubridate)
+library(bizdays)
+
+# Load data
+
+laborables <- create.calendar(name='CalendarioAlmeria',
+                              start.date='2023-01-01',
+                              end.date='2024-12-31',
+                              weekdays= c('saturday','sunday'),
+                              holidays= c('2023-01-02','2023-01-06','2023-02-28','2023-04-06','2023-04-07','2023-05-01','2023-08-15','2023-10-12','2023-11-01','2023-12-06','2023-12-08','2023-12-25','2023-12-26','2024-01-01','2024-01-06','2024-02-28','2024-03-28','2024-03-29','2024-05-01','2024-08-15','2024-10-12','2024-11-01','2024-12-06','2024-12-09','2024-12-25','2024-06-24'))
+
+# Define UI
+
+ui <- fluidPage(
+  # Application title
+  titlePanel("Calendario plazos días laborales Almería 2023-2024"),
+  
+  # Sidebar with an input
+  sidebarLayout(
+    sidebarPanel(
+      dateInput("date_input", "Día de registro:", value = "2023-01-01", min = 2023-01-01, format="yyyy-mm-dd"),
+      numericInput("day_input", "Plazo días hábiles:", value = 30)
+    ),
+    
+    # Main with output
+    mainPanel(
+      textOutput("text_output")
+    )
+  )
+)
+
+# Define server 
+
+server <- function(input, output) {
+  
+  output$text_output <- renderPrint({
+    offset(ymd(input$date_input), n=input$day_input, cal='CalendarioAlmeria')
+  })
+  
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
